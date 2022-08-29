@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小球转圈圈</title>
+  <link rel="stylesheet" href="./css/index.css">
+  <script src="./js/cvsEllipticMotion.js"></script>
+
+  <style>
+    body, html {
+      width: 100%;
+      height: 100%;
+    }
+    #demo01 {
+      width: 50%;
+      height: 50%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 5);
+      
+      
+    }
+  </style>
+</head>
+<body>
+  <button id="button01">暂停</button>
+  <div id="demo01"></div>
+
+  <script>
+    window.onload = function () {
+      var iCvs = new CvsEllipticMotion(document.getElementById('demo01'))
+
+      document.getElementById('button01').onclick = function () {
+        console.log(this)
+        if(iCvs.isMoving()) {
+          iCvs.pause()
+          this.innerText = '开始'
+        } else {
+          iCvs.start()
+          this.innerText = '暂停'
+        }
+      }
+      // console.log("iCvs", iCvs)
+
+      window.onresize = function () {
+        iCvs.resize()
+      }
+    }
+    
+  </script>
+</body>
+</html>

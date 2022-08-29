@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>蒙版效果</title>
+    <link rel="stylesheet" href="../maptalks.css" />
+    <script src="../maptalks.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/Turf.js/6.5.0/turf.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <script src="./utils.js"></script>
+    <script src="./YouYangMaptalksMaskPlugin.js?t=1"></script>
+    
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        border: none;
+        padding: 0;
+      }
+
+      #destroyButton {
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+      .mapwrapper {
+        width: 600px;
+        height: 600px;
+        margin: 20px;
+        background-image: url("./6.jpg");
+        background-position: center center;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="destroyButton">销毁</button>
+    <div class="mapwrapper" id="map02"></div>
+    <div class="mapwrapper" id="map01"></div>
+
+    <script>
+      var map = new window.maptalks.Map(document.getElementById("map01"), {
+        center: [108.767201, 28.799828],
+        zoom: 9,
+        pitch: 20,
+      });
+
+      var map02 = new window.maptalks.Map(document.getElementById("map02"), {
+        center: [108.767201, 28.799828],
+        zoom: 9,
+        pitch: 20,
+      });
+
+      const iPlugin01 = new YouYangMaptalksMaskPlugin(map, "酉阳", {
+        TileLayer: window.maptalks.TileLayer,
+        VectorLayer: window.maptalks.VectorLayer,
+        Polygon: window.maptalks.Polygon,
+        httpRequest: axios,
+        turfSplit: {
+          transformTranslate: turf.transformTranslate,
+          polygon: turf.polygon
+        }
+      }).render();
+
+      const iPlugin02 = new YouYangMaptalksMaskPlugin(map02, "花田乡", {
+        TileLayer: window.maptalks.TileLayer,
+        VectorLayer: window.maptalks.VectorLayer,
+        Polygon: window.maptalks.Polygon,
+        httpRequest: axios,
+        turfSplit: {
+          transformTranslate: turf.transformTranslate,
+          polygon: turf.polygon
+        }
+      }).render();
+
+      document.getElementById("destroyButton").onclick = function () {
+        iPlugin01.dispose();
+        iPlugin02.dispose();
+      };
+    </script>
+  </body>
+</html>

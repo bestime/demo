@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "baseUrl": "./",
+    "paths": {
+      
+    }
+  },
+  "include": ["**/*.js", "js/bestime/*.ts", "index.html"],
+  "exclude": []
+}

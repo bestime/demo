@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工作demo集合</title>
+  <script src="./js/bestime/bestime.iife.min.js"></script>
+  <style>
+    .tree-item {
+      line-height: normal;
+      margin: 0;
+      padding: 0 0 0 10px;;
+    }
+
+    .tree-item a {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="ul-box"></div>
+
+  <script type="text/javascript">
+    
+    ;(function (treeList) {
+      const oUl = document.getElementById('ul-box')
+      var _html = ''
+      
+      ;(function renderTree (children, level) {
+        _html += `<div class="tree-item lv-${level}">`
+        for(var a = 0; a < children.length; a++) {
+          var item = children[a]
+          _html += `
+            <a href="${item.url}">${item.name}</a>  
+          `
+          if(item.children) {
+            renderTree(item.children, level + 1)
+          }
+        }
+        _html += '</div>'
+      })(treeList, 0);
+
+      oUl.innerHTML = _html
+      
+      
+
+    })([
+      {
+        name: 'maptalks',
+        url: '',
+        children: [
+          {
+            name: '根据多边形实现蒙版效果',
+            url: './pages/maptalks/mask/index.html'
+          }
+        ]
+      },
+      {
+        name: 'canvas',
+        url: '',
+        children: [
+          {
+            name: 'cvsEllipticMotion 小球转圈圈',
+            url: './pages/canvas/CvsEllipticMotion/index.html'
+          }
+        ]
+      }
+    ]);
+  </script>
+  
+</body>
+</html>

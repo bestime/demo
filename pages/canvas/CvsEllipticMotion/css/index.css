@@ -1,0 +1,45 @@
+[plugin=CvsEllipticMotion] {
+  padding: 0;
+  border: none;
+  position:relative;
+  min-width: 100px;
+  min-height: 100px;
+  overflow: hidden;
+  font-size: 0;
+  margin: 0;
+}
+
+[plugin=CvsEllipticMotion]::after {
+  background-image: radial-gradient(at center center,#3d7373,#021417);
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  content: '';
+  z-index: 1;
+}
+
+[plugin=CvsEllipticMotion]::before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  content: '';
+  z-index: 2;
+  background-image: url("../images/1.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 60% 60%;
+  transform: translate3d(-5px, -7px, 0);
+}
+
+[plugin=CvsEllipticMotion] canvas {
+  position: relative;
+  z-index:3;
+  width: 0;
+  height: 0;
+  margin: 0;
+  border: none;
+}
