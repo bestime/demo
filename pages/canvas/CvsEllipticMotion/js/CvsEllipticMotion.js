@@ -1,7 +1,7 @@
 /**
  * 注意：建议引入静态文件，不建议通过import载入
  *
- * @see [小球转圈圈](https://github.com/bestime/demo/tree/main/maptalks/mask)
+ * @see [小球转圈圈](https://github.com/bestime/demo/tree/main/pages/canvas/CvsEllipticMotion)
  * @author bestime
  */
 var CvsEllipticMotion = (function () {
@@ -21,6 +21,8 @@ var CvsEllipticMotion = (function () {
     }
     oWarperElement.setAttribute('plugin', 'CvsEllipticMotion')
     var oCanvasElement = document.createElement('canvas')
+    var oBg = document.createElement('div')
+    oBg.className = 'vemcbg01'
     this._canvasEl = oCanvasElement
     this._canvasContext = oCanvasElement.getContext("2d");
     this._wrapper = oWarperElement
@@ -28,23 +30,40 @@ var CvsEllipticMotion = (function () {
     this.resize(true)
 
     
-
+    const color = 'rgba(30,168,234,0.2)'
     
 
     this._tracks = [
-      this._createTrack(0.9, 0, 0.3, 15, '#cee81c'),
-      this._createTrack(0.8, 30, 0.4, 12, '#438ca8'),
-      this._createTrack(0.7, 60, 0.2, 10, '#1ce8b1'),
-      this._createTrack(0.6, 90, 0.1, 8, '#e85a1c'),
-      this._createTrack(0.5, 180, 0.2, 7, '#e11ce8'),
-      this._createTrack(0.4, 200, 0.3, 6, '#1ce8d7'),
-      this._createTrack(0.3, 280, 0.2, 8, '#7dd865'),
+      this._createTrack(1, 0, -0.3, 8, color),
+      this._createTrack(1, 180, 0.1, 6, color),
+
+      this._createTrack(0.9, 45, 0.2, 14, color),
+      this._createTrack(0.9, 225, 0.1, 8, color),
+      
+      this._createTrack(0.8, 90, 0.3, 6, color),
+      this._createTrack(0.8, 270, 0.1, 8, color),
+
+      this._createTrack(0.7, 135, 0.1, 6, color),
+      this._createTrack(0.7, 315, 0.15, 8, color),
+
+      this._createTrack(0.6, 180, 0.25, 8, color),
+      this._createTrack(0.6, 0, -0.15, 12, color),
+
+      // this._createTrack(0.5, 225, 0.1, 8, color),
+      // this._createTrack(0.5, 45, -0.1, 8, color),
+
+      // this._createTrack(0.4, 270, 0.1, 8, color),
+      // this._createTrack(0.4, 90, -0.1, 8, color),
+
+      // this._createTrack(0.3, 315, 0.1, 8, color),
+      // this._createTrack(0.3, 135, -0.1, 8, color),
     ]
 
 
 
 
     oWarperElement.appendChild(oCanvasElement)
+    oWarperElement.appendChild(oBg)
     
 
   

@@ -37,9 +37,19 @@
 
 [plugin=CvsEllipticMotion] canvas {
   position: relative;
-  z-index:3;
+  z-index:10;
   width: 0;
   height: 0;
   margin: 0;
   border: none;
+}
+
+[plugin=CvsEllipticMotion] .vemcbg01 {
+  background-image: radial-gradient(at center center,transparent,#000);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top:0;
+  z-index: 2;
 }

@@ -3,7 +3,7 @@
 /**
  * 注意：建议引入静态文件，不建议通过import载入
  *
- * @see [地图蒙版示例](https://github.com/bestime/demo/tree/main/maptalks/mask)
+ * @see [地图蒙版示例](https://github.com/bestime/demo/tree/main/pages/maptalks)
  * @author bestime
  */
  var YouYangMaptalksMaskPlugin = (function () {
