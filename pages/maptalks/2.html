@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>天地图瓦片-示例</title>
+  <style type="text/css">
+    html,body{margin:0px;height:100%;width:100%}
+    .container{width:100%;height:100%}
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/maptalks/dist/maptalks.css">
+  <script type="text/javascript" src="https://unpkg.com/maptalks/dist/maptalks.min.js"></script>
+  <body>
+
+    <div id="map" class="container"></div>
+
+    
+
+    <script>
+
+      function parseUrl (layer, tilematrixset) {
+        const query = {
+          'SERVICE': 'WMTS',
+          'REQUEST': 'GetTile',
+          'VERSION': '1.0.0',
+          'LAYER': layer,
+          'STYLE': 'default',
+          'TILEMATRIXSET': tilematrixset,
+          'FORMAT': 'tiles',
+          'TILEMATRIX': '{z}',
+          'TILEROW': '{y}',
+          'TILECOL': '{x}',
+          'tk': 'd89f15365eb3645f72f26c32f3afb3e8',
+        }
+        
+        let searchList = []
+        for(let key in query) {
+          searchList.push(`${key}=${query[key]}`)
+        }
+
+        const url = `http://t{s}.tianditu.gov.cn/${layer}_${tilematrixset}/wmts?${searchList.join('&')}`
+
+        console.log("瓦片地址", url)
+        
+        return url
+      }
+
+
+      const center = [41.73405552286226, -67.6028583561434]
+      var diff = {
+        tileSystem : [1,-1,-180,90],       
+      }
+
+      
+
+      var map = new maptalks.Map('map', {
+        zoom: 6,
+        control: false,
+        center: center,
+        spatialReference: {
+          projection: "EPSG:4326",
+        }
+      });
+
+      const layer01 = new maptalks.TileLayer('test01', {
+        urlTemplate: parseUrl('vec', 'c'),
+        subdomains: [1, 2, 3, 4, 5],
+        crossOrigin: "Anonymous",
+        ...diff      
+      })
+
+      const layer02 = new maptalks.TileLayer('test02', {
+        urlTemplate: 'http://127.0.0.1:100/demo/wapian/t2/{z}/{y}/{x}.png' || parseUrl('cia', 'c'),
+        crossOrigin: "Anonymous",
+        subdomains: [1, 2, 3, 4, 5],
+        ...diff
+      })
+
+
+      map.addLayer([layer01, layer02])
+
+      var point = new maptalks.Marker(
+        center,
+        {
+          visible : true,
+          editable : true,
+          cursor : 'pointer',
+          shadowBlur : 0,
+          shadowColor : 'black',
+          draggable : false,
+          dragShadow : false, // display a shadow during dragging
+          drawOnAxis : null,  // force dragging stick on a axis, can be: x, y
+        }
+      );
+
+      new maptalks.VectorLayer('vector', point).addTo(map);
+
+    </script>
+  </body>
+</html>

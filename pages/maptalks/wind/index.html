@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>风场测试</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/maptalks/1.0.0-rc.17/maptalks.min.js"></script>
+  <script src="./Wind.js"></script>
+  <script src="./wind-layer.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <style type="text/css">
+    canvas {
+      background-color: #444;
+    }
+  </style>
+  <script>
+    
+  </script>
+</head>
+<body>
+  <canvas id="demo"></canvas>
+
+    <script>
+
+      const colorList = [
+        {
+          start: 0,
+          end: 3,
+          color: '#14fb6c'
+        },
+        {
+          start: 3,
+          end: 6,
+          color: 'green'
+        },
+        {
+          start: 6,
+          end: 9,
+          color: 'pink'
+        },
+        {
+          start: 9,
+          end: 12,
+          color: 'yellow'
+        },
+        {
+          start: 12,
+          end: 16,
+          color: '#2ceaef'
+        },
+      ]
+
+
+      $.getJSON({
+        url: './gfs.json',
+        success: function (res) {
+          
+          const iWind = new Wind(document.getElementById('demo'), colorList)
+          const bounds = [
+            [0, 0],
+            [1000, 800]
+          ]
+
+          const width = 1000
+          const height = 800
+          // [xmin, ymin]
+          // [xmax, ymax]
+          const extent = [
+            [-121.04865624999248, 76.61669175448446],
+            [-77.10334375000416, 82.7308843655674]
+          ]
+          iWind.setGfsData(res)
+          iWind.start(bounds, width, height, extent)
+          console.log("实例化", iWind)
+        }
+      })
+
+    </script>
+</body>
+</html>

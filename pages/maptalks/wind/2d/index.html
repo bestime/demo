@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>风场测试</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/maptalks/1.0.0-rc.17/maptalks.min.js"></script>
+    <script src="./index.min.js?t=4"></script>
+    <script src="./wind-layer.js"></script>
+    
+    <style>
+      html,
+      body {
+        margin: 0px;
+        height: 100%;
+        width: 100%;
+      }
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <script>
+      var map = new maptalks.Map('map', {
+        center: [106, 29],
+        zoom: 5,
+        dragPitch: false,
+        dragRotate: false,
+      });
+
+      const layer02 = new maptalks.TileLayer('tile', {
+        urlTemplate:
+          'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}'
+      })
+
+      map.on('click', function () {
+        console.log(arguments);
+      });
+
+      const point = new maptalks.Marker([106, 29]);
+
+      maptalks.Ajax.getJSON('../gfs.json', function (err, data) {
+        var myWindLayer = new WindLayer('wind', {
+          opacity: 1,
+          zIndex: 50,
+          forceRenderOnMoving: true,
+          forceRenderOnZooming: true,
+          forceRenderOnRotating: true,
+          windOption: {
+            colors: function () {
+              return 'rgba(0,255,0,1)'
+            },
+            lineWidth: 2,
+            speed: 90
+          }
+        }).addTo(map);
+
+        myWindLayer.setData(data)
+
+
+
+
+        layer02.addTo(map)
+        new maptalks.VectorLayer('vector', point).addTo(map);
+      });
+    </script>
+  </body>
+</html>

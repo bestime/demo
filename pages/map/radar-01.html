@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>Aeris JS - Covid19Module Module</title>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        #app {
+            height: 100%;
+            width: 100%;
+        }
+        .covid19 .awxjs__ui-row {
+            margin-bottom: 5px;
+        }
+        #credit {
+            position: absolute;
+            bottom: 20px;
+            left: 50px;
+            border: 3px solid #888888;
+            background-color: antiquewhite;
+            z-index: 1000;
+            padding: 0 5px 10px 5px;
+            border-radius: 10px;
+            max-width: 250px;
+            font-size: .8em;
+        }
+
+        @media screen and (max-width: 600px) {
+            #credit {
+                visibility: hidden;
+                display: none;
+            }
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="https://cdn.aerisapi.com/sdk/js/1.3.0/aerisweather.css">
+
+</head>
+<body>
+
+<div id="app"></div>
+<div id="credit">
+    <h3>COVID-19 Information</h3>
+    <div>
+        Visualization of COVID-19 information from <a href="https://github.com/CSSEGISandData/COVID-19">John Hopkins
+        CSSE</a>,
+        utilizing the AerisWeather <a href="https://www.aerisweather.com/support/docs/toolkits/aeris-js-sdk/">JavaScript
+        SDK</a>.<br/><br/>
+        Data is updated daily and available by country or individual state/provinces. Select a marker for more information.
+    </div>
+</div>
+<script>
+    window.addEventListener('load', () => {
+
+        // Update with your Aeris account access keys
+        const aeris = new AerisWeather('q2ZG1wIYyW5jz2qMVs4XV', 'T15iEonob1d2H8kUPkbqlfk4gE2MvYQwiFbNfCVA');
+
+        aeris.apps().then((apps) => {
+            const app = new apps.InteractiveMapApp('#app', {
+                map   : {
+                    map: {
+                        zoom: 4
+                    }
+                },
+                panels: {
+                    layers: {
+                        buttons: [
+                            {
+                                id      : "radargroup",
+                                title   : "Radar",
+                                segments: [
+                                    {
+                                        id   : "radar",
+                                        title: "Radar",
+                                        value: "radar:80"
+                                    },
+                                    {
+                                        id   : "radarglobal",
+                                        title: "Global Radar (Derived)",
+                                        value: "radar-est:80"
+                                    }
+                                ]
+                            },
+                            {
+                                id      : "satellite",
+                                title   : "Satellite",
+                                segments: [
+                                    {
+                                        title: "Infrared",
+                                        value: "satellite:80"
+                                    },
+                                    {
+                                        title: "Geocolor",
+                                        value: "satellite-geocolor,states-outlines-dk"
+                                    }
+                                ]
+                            },
+                            {
+                                title: "Global Temperatures",
+                                value: "temperatures:80,states-outlines-dk"
+                            }
+                        ]
+                    }
+                }
+            });
+
+            app.on("ready", () => {
+                // Add an instance of your module to the map application
+                app.modules.insertAt(1, new Covid19Module());
+
+                // set initial visible layers
+                const layers = app.getPanel("layers");
+                if (layers) {
+                    layers.select(["covid19"]);
+                }
+            });
+        });
+
+    });
+</script>
+<script src="https://cdn.aerisapi.com/sdk/js/latest/aerisweather.min.js"></script>
+<script type="text/javascript" src="https://cdn.aerisapi.com/sdk/js/modules/awxjs-covid19.min.js"></script></body>
+</html>

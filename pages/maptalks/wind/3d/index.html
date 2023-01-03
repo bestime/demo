@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>maptalks风场图</title>
+  <style type="text/css">
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+    .container {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <body>
+    <div id="map" class="container"></div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/maptalks/1.0.0-rc.17/maptalks.min.js"></script>
+    <script src="./maptalks.animate-gfs-wind.min.js"></script>
+    <!-- <script src="http://127.0.0.1:99/git/animate-gfs-wind/static/maptalks/maptalks-wind.js"></script> -->
+    
+    <script>
+      const map = new maptalks.Map('map', {
+        center: [0.25, 40.25],
+        zoom: 3,
+        baseLayer: new maptalks.TileLayer('base', {
+          urlTemplate:
+            'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}'
+        })
+      });
+
+      const colorList = [
+        'rgb(36,104, 180)',
+        'rgb(60,157, 194)',
+        'rgb(128,205,193 )',
+        'rgb(151,218,168 )',
+        'rgb(198,231,181)',
+        'rgb(238,247,217)',
+        'rgb(255,238,159)',
+        'rgb(252,217,125)',
+        'rgb(255,182,100)',
+        'rgb(252,150,75)',
+        'rgb(250,112,52)',
+        'rgb(245,64,32)',
+        'rgb(237,45,28)',
+        'rgb(220,24,32)',
+        'rgb(180,0,35)'
+      ];
+
+      function convertCzData (data) {
+        const headerTemp = {
+          parameterCategory: 2,
+          dx: +data.stepX,
+          dy: +data.stepY,
+          lo1: +data.xmin,
+          lo2: +data.xmax,
+          la1: +data.ymax,
+          la2: +data.ymin,
+          nx: data.gridDatas.U[0].length,
+          ny: data.gridDatas.U.length,
+        }
+
+        const dataU = {
+          header: {
+            ...headerTemp,
+            parameterNumber: 2,
+            parameterNumberName: "U-component_of_wind"
+          },
+          data: data.gridDatas.U.flat()
+        }
+
+        const dataV = {
+          header: {
+            ...headerTemp,
+            parameterNumber: 3,
+            parameterNumberName: "V-component_of_wind"
+          },
+          data: data.gridDatas.V.flat()
+        }
+
+        return [dataU, dataV]
+      }
+
+      async function getCzWindData () {
+        return new Promise(function (resolve) {
+          maptalks.Ajax.getJSON('../cz-grid.json', function (e2, r2) {
+            resolve(convertCzData(r2.data))
+          })
+        })
+      }
+
+      async function getGfsData () {
+        return new Promise(function (resolve) {
+          maptalks.Ajax.getJSON('../gfs.json', function (e2, res) {
+            resolve(res)
+          })
+        })
+      }
+
+
+
+      ;(async function () {
+        let res = await getGfsData()
+        // res = await getCzWindData()
+        console.log("测试", res)
+        // mtkWind;
+        // maptalksGfsWind
+        const windLayer = new maptalksGfsWind.WindLayer('wind', res, {
+          windOptions: {
+            colorScale: function (value) {
+              const len = colorList.length;
+              const min = 0;
+              const max = 10;
+              const index = Math.max(
+                0,
+                Math.min(len - 1, Math.round(((value - min) / (max - min)) * (len - 1)))
+              );
+              return colorList[index];
+            },
+            frameRate: 17,
+            maxAge: 50,
+            globalAlpha: 0.92,
+            paths: 10000
+          }
+        });
+
+        map.addLayer(windLayer);
+      })();
+    </script>
+  </body>
+</html>
