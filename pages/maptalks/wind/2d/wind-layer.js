@@ -1,4 +1,7 @@
-// 2
+/**
+ * 实例方法
+ 
+*/
 var WindLayer = (function () {
   function transformExtent(extent, opt_stops) {
     return applyTransform(extent, transform, undefined, opt_stops);
@@ -88,6 +91,7 @@ var WindLayer = (function () {
   class Main extends maptalks.Layer {
     _data = []
     _windOption = {}
+    _isClear = false
   
     // 构造函数
     constructor(id, options) {
@@ -97,8 +101,16 @@ var WindLayer = (function () {
     }
   
     setData(data) {
-      this.data = data;
+      this._data = data;
+      this.clear()
+      this._isClear = false
+      this._renderer?.draw?.()
       return this;
+    }
+
+    clear () {
+      this._isClear = true
+      this._renderer?._IWind?.clear?.()
     }
 
 
@@ -108,7 +120,7 @@ var WindLayer = (function () {
   
   
     getData() {
-      return this.data;
+      return this._data;
     }
   }
   
@@ -116,6 +128,7 @@ var WindLayer = (function () {
   
   class HelloLayerRenderer extends maptalks.renderer.CanvasRenderer {
     _IWind = undefined;
+
     checkResources() {
       //HelloLayer只是绘制文字, 没有外部图片, 所以返回空数组
       return [];
@@ -152,6 +165,7 @@ var WindLayer = (function () {
   
   
     draw() {
+      if(this.layer._isClear) return;
       if(!this.canvas) {
         this.prepareCanvas();
         const windConfig = this.layer.getWindConfig()
@@ -161,8 +175,9 @@ var WindLayer = (function () {
           },
         })
         
-        this._IWind = new AnimateGfsWind(this.canvas,windConfig )
+        this._IWind = new AnimateGfsWind(this.canvas, windConfig)
       }
+
   
       this._IWind.setGfsData(this.layer.getData())
       const ext = this._getWindExtents()

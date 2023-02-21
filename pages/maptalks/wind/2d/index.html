@@ -20,9 +20,22 @@
         width: 100%;
         height: 100%;
       }
+      .mapbuton {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        z-index: 20;
+        background-color: black;
+        padding: 20px;
+      }
     </style>
   </head>
   <body>
+    <div class="mapbuton">
+      <button id="button-01">开始动画</button>
+      <button id="button-02">清空图层</button>
+    </div>
     <div id="map"></div>
 
     <script>
@@ -55,8 +68,10 @@
             colors: function () {
               return 'rgba(0,255,0,1)'
             },
-            lineWidth: 2,
-            speed: 90
+            lineWidth: 2, // 粒子宽度
+            speed: 16, // 粒子速度
+            // particleCount: 50, // 粒子数量
+            // maxAge: 5, // 粒子长度
           }
         }).addTo(map);
 
@@ -64,9 +79,16 @@
 
 
 
-
         layer02.addTo(map)
         new maptalks.VectorLayer('vector', point).addTo(map);
+
+
+        document.getElementById('button-01').onclick = function () {
+          myWindLayer.setData(data)
+        }
+        document.getElementById('button-02').onclick = function () {
+          myWindLayer.clear()
+        }
       });
     </script>
   </body>
